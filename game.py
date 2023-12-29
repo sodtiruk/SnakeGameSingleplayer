@@ -1,29 +1,54 @@
 from tkinter import *
+from PIL import ImageTk
 
-
-class Field(Canvas):
+class Game(Canvas):
 
     def __init__(self, w, h):
         super().__init__(width=w, height=h, background='black', highlightthickness=0)
 
+    def create_object(self, objects, position, tagname):
+        #create object
+        for x_pos, y_pos in position:
+            self.create_image(x_pos, y_pos, image=objects, tags=tagname)
 
 
 class Snake:
     def __init__(self):
-        pass        
+        # position        head--------------------tail
+        self.position = [(100,100), (80, 100), (60, 100)]
     
+    def getPostion(self):
+        return self.position 
+
+    def setPostion(self, x, y):
+        pass
+        
+
+    def load_assets(self):
+        self.snake = ImageTk.PhotoImage(file='assets/body.png')
     
+    def get_assets(self):
+        return self.snake
+    
+    def create_object_snake(self):
+        pass
 
 if __name__ == '__main__':
-    game = Tk()
+    app = Tk()
 
     # Create field game
-    fieldgame = Field(600, 620)
-    fieldgame.pack()
+    game = Game(600, 620)
 
     # Snake
+    snake = Snake() # First Snake
+    snake.load_assets() # Load assets
+    object_snake = snake.get_assets()
+    snake_position = snake.getPostion()
+    game.create_object(objects=object_snake, position=snake_position, tagname='snake')
 
-    game.mainloop()
+
+    game.pack()
+    app.mainloop()
 
 
 

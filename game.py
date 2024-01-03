@@ -16,6 +16,7 @@ class Snake:
     def __init__(self):
         # position        head--------------------tail
         self.position = [(100,100), (80, 100), (60, 100)]
+        self.snake = ImageTk.PhotoImage(file='assets/body.png')
     
     def getPostion(self):
         return self.position 
@@ -24,8 +25,6 @@ class Snake:
         pass
         
 
-    def load_assets(self):
-        self.snake = ImageTk.PhotoImage(file='assets/body.png')
     
     def get_assets(self):
         return self.snake
@@ -41,7 +40,6 @@ if __name__ == '__main__':
 
     # Snake
     snake = Snake() # First Snake
-    snake.load_assets() # Load assets
     object_snake = snake.get_assets()
     snake_position = snake.getPostion()
     game.create_object(objects=object_snake, position=snake_position, tagname='snake')

@@ -29,7 +29,7 @@ class Snake:
     
     def get_assets(self):
         return self.snake
-    
+
     def create_object_snake(self):
         pass
 
@@ -45,7 +45,7 @@ if __name__ == '__main__':
     object_snake = snake.get_assets()
     snake_position = snake.getPostion()
     game.create_object(objects=object_snake, position=snake_position, tagname='snake')
-
+    
 
     game.pack()
     app.mainloop()

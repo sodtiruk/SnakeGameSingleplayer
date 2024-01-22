@@ -40,7 +40,7 @@ class Game(Canvas):
 
     def runGame(self):
         self.moveObjectSnake()
-        self.after(70, self.runGame)
+        self.after(50, self.runGame)
     
     #Food solution =====================>
     def createObjectFood(self):
@@ -98,8 +98,3 @@ if __name__ == '__main__':
 
     game.pack()
     app.mainloop()
-
-    
-
-
-

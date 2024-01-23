@@ -3,7 +3,6 @@ from PIL import ImageTk
 from random import randint
 
 class Game(Canvas):
-
     def __init__(self, snake, food):
         super().__init__(width=600, height=620, background='black', highlightthickness=0)
         self.snake = snake
@@ -53,15 +52,24 @@ class Game(Canvas):
         tagsIdFood = self.find_withtag('food')
         if headSnake == foodPosition:
             xPosFoodRandom = randint(1, 30) * 20
-            yPosFoodRandom = randint(1, 31) * 20
+            yPosFoodRandom = randint(1, 30) * 20
             self.food.setPosition((xPosFoodRandom, yPosFoodRandom))
             self.coords(tagsIdFood, (xPosFoodRandom, yPosFoodRandom))
+            self.addTailSnake()
+    
+    def addTailSnake(self):
+        imageBodySnake = self.snake.getImageBody()
+        snakePosition = self.snake.getPosition()
+        tailSnakePosition = [snakePosition[-1]]
+        newSnakePosition = snakePosition + tailSnakePosition 
+        self.snake.setPosition(newSnakePosition)
+        self.create_image(tailSnakePosition, image=imageBodySnake, tags='snake') 
 
     def runGame(self):
         self.moveObjectSnake()
         self.snakeCollisionFood()
         self.after(50, self.runGame)
-    
+
     def onKeyPress(self, e):
         direction = e.keysym
         self.direction = direction

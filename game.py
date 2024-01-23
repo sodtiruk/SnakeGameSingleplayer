@@ -31,10 +31,12 @@ class Game(Canvas):
             newPosition = [(headx, heady - 20)] + position[:-1]
         if self.direction == 'Down':
             newPosition = [(headx, heady + 20)] + position[:-1]
-        self.snake.setPosition(newPosition) 
 
+        self.snake.setPosition(newPosition) 
+        self.drawSnakeMove(newPosition)
+
+    def drawSnakeMove(self, newPosition): 
         tagsIdSnakes = self.find_withtag('snake')
-        #Draw body images snake move 
         for tagsIdSnakes, position in zip(tagsIdSnakes, newPosition):
             self.coords(tagsIdSnakes, position)
 
@@ -94,7 +96,6 @@ if __name__ == '__main__':
     game.createObjectFood()
     game.runGame()
 
-    
 
     game.pack()
     app.mainloop()

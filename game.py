@@ -51,8 +51,8 @@ class Game(Canvas):
 
         tagsIdFood = self.find_withtag('food')
         if headSnake == foodPosition:
-            xPosFoodRandom = randint(1, 30) * 20
-            yPosFoodRandom = randint(1, 30) * 20
+            xPosFoodRandom = randint(1, 29) * 20
+            yPosFoodRandom = randint(1, 29) * 20
             self.food.setPosition((xPosFoodRandom, yPosFoodRandom))
             self.coords(tagsIdFood, (xPosFoodRandom, yPosFoodRandom))
             self.addTailSnake()
@@ -72,7 +72,11 @@ class Game(Canvas):
 
     def onKeyPress(self, e):
         direction = e.keysym
-        self.direction = direction
+
+        if ((direction == "Right" or direction == "Left") and (self.direction == "Up" or self.direction == "Down")):
+            self.direction = direction
+        elif ((direction == "Up" or direction == "Down") and (self.direction == "Left" or self.direction == "Right")):
+            self.direction = direction
 
 class Snake:
     def __init__(self):

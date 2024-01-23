@@ -1,5 +1,6 @@
 from tkinter import *
 from PIL import ImageTk
+from random import randint
 
 class Game(Canvas):
 
@@ -11,13 +12,18 @@ class Game(Canvas):
         self.direction = 'Right'
         self.bind_all('<Key>', self.onKeyPress)
 
-    #Snake solution ===========================>
     def createObjectSnake(self):
         #create object and forloop for draw box body snake
         position = self.snake.getPosition()
         imageBody = self.snake.getImageBody()
         for x_pos, y_pos in position:
             self.create_image(x_pos, y_pos, image=imageBody, tags='snake')
+
+    def createObjectFood(self):
+        position = self.food.getPosition()
+        imageFood = self.food.getImageFood()
+        #Draw food
+        self.create_image(position, image=imageFood, tags="food")
 
     def moveObjectSnake(self):
         position = self.snake.getPosition()        
@@ -40,17 +46,22 @@ class Game(Canvas):
         for tagsIdSnakes, position in zip(tagsIdSnakes, newPosition):
             self.coords(tagsIdSnakes, position)
 
+    def snakeCollisionFood(self):
+        headSnake = self.snake.getPosition()[0]
+        foodPosition = self.food.getPosition()
+
+        tagsIdFood = self.find_withtag('food')
+        if headSnake == foodPosition:
+            xPosFoodRandom = randint(1, 30) * 20
+            yPosFoodRandom = randint(1, 31) * 20
+            self.food.setPosition((xPosFoodRandom, yPosFoodRandom))
+            self.coords(tagsIdFood, (xPosFoodRandom, yPosFoodRandom))
+
     def runGame(self):
         self.moveObjectSnake()
+        self.snakeCollisionFood()
         self.after(50, self.runGame)
     
-    #Food solution =====================>
-    def createObjectFood(self):
-        position = self.food.getPosition()
-        imageFood = self.food.getImageFood()
-        #Draw food
-        self.create_image(position, image=imageFood, tags="Food")
-
     def onKeyPress(self, e):
         direction = e.keysym
         self.direction = direction

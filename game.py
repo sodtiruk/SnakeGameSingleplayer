@@ -7,9 +7,19 @@ class Game(Canvas):
         super().__init__(width=600, height=620, background='black', highlightthickness=0)
         self.snake = snake
         self.food = food
+        self.score = 0
+        self.createFrameGame() # create frame game
+        self.createTextGame() #Show text score game
 
         self.direction = 'Right'
-        self.bind_all('<Key>', self.onKeyPress)
+        self.bind_all('<Key>', self.onKeyPress) # call this function keypress all time
+
+    def createTextGame(self):
+        FONT = (None, 14)
+        self.create_text(45, 12, text="Score: {}".format(self.score), tags="score", fill="green", font=FONT)
+
+    def createFrameGame(self):
+        self.create_rectangle(7, 27, 593, 613, outline="#FFF")
 
     def createObjectSnake(self):
         #create object and forloop for draw box body snake
@@ -51,15 +61,20 @@ class Game(Canvas):
 
         tagsIdFood = self.find_withtag('food')
         if headSnake == foodPosition:
+            # change score game when you eat your food
+            idTagScore = self.find_withtag("score")
+            self.score += 1 # add score = 1
+            self.itemconfig(idTagScore, text="Score: {}".format(self.score), tags="score")
+
             xPosFoodRandom = randint(1, 29) * 20
-            yPosFoodRandom = randint(1, 29) * 20
+            yPosFoodRandom = randint(2, 29) * 20
             self.food.setPosition((xPosFoodRandom, yPosFoodRandom))
             self.coords(tagsIdFood, (xPosFoodRandom, yPosFoodRandom))
             self.addTailSnake()
     
     def snakeCollisionWall(self):
         headx, heady = self.snake.getPosition()[0]
-        if headx < 20 or headx > 580 or heady < 20 or heady > 600:  
+        if headx < 20 or headx > 580 or heady < 40 or heady > 600:  
             self.startGameOver()
 
     def snakeCollisionBody(self):
@@ -72,15 +87,21 @@ class Game(Canvas):
     def startGameOver(self):
         #delete all images
         self.delete("all") 
-        # reset position all
+
+
+
+        # reset all variable game
         self.snake.setPosition([(60, 200)])
         xPosFoodRandom = randint(1, 29) * 20
-        yPosFoodRandom = randint(1, 29) * 20
+        yPosFoodRandom = randint(2, 29) * 20
         self.food.setPosition((xPosFoodRandom, yPosFoodRandom))
         self.direction = "Right"
+        self.score = 0
         # draw image again
         self.createObjectSnake()
         self.createObjectFood()
+        self.createTextGame()
+        self.createFrameGame()
 
     def addTailSnake(self):
         imageBodySnake = self.snake.getImageBody()
@@ -123,7 +144,7 @@ class Snake:
 class Food():
     def __init__(self):
         xPosRandom = randint(1, 29) * 20
-        yPosRandom = randint(1, 29) * 20
+        yPosRandom = randint(2, 29) * 20
         self.position = (xPosRandom, yPosRandom) 
         self.imageFood = ImageTk.PhotoImage(file="assets/food.png")   
     

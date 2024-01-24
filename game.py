@@ -57,6 +57,31 @@ class Game(Canvas):
             self.coords(tagsIdFood, (xPosFoodRandom, yPosFoodRandom))
             self.addTailSnake()
     
+    def snakeCollisionWall(self):
+        headx, heady = self.snake.getPosition()[0]
+        if headx < 20 or headx > 580 or heady < 20 or heady > 600:  
+            self.startGameOver()
+
+    def snakeCollisionBody(self):
+        positionSnake = self.snake.getPosition()
+        headSnake = positionSnake[0]
+        bodySnake = positionSnake[1:]
+        if headSnake in bodySnake:
+            self.startGameOver()
+
+    def startGameOver(self):
+        #delete all images
+        self.delete("all") 
+        # reset position all
+        self.snake.setPosition([(60, 200)])
+        xPosFoodRandom = randint(1, 29) * 20
+        yPosFoodRandom = randint(1, 29) * 20
+        self.food.setPosition((xPosFoodRandom, yPosFoodRandom))
+        self.direction = "Right"
+        # draw image again
+        self.createObjectSnake()
+        self.createObjectFood()
+
     def addTailSnake(self):
         imageBodySnake = self.snake.getImageBody()
         snakePosition = self.snake.getPosition()
@@ -67,12 +92,13 @@ class Game(Canvas):
 
     def runGame(self):
         self.moveObjectSnake()
+        self.snakeCollisionWall()
+        self.snakeCollisionBody()
         self.snakeCollisionFood()
         self.after(50, self.runGame)
 
     def onKeyPress(self, e):
         direction = e.keysym
-
         if ((direction == "Right" or direction == "Left") and (self.direction == "Up" or self.direction == "Down")):
             self.direction = direction
         elif ((direction == "Up" or direction == "Down") and (self.direction == "Left" or self.direction == "Right")):
@@ -81,7 +107,8 @@ class Game(Canvas):
 class Snake:
     def __init__(self):
         # position        head--------------------tail
-        self.position = [(100,100), (80, 100), (60, 100)]
+        # self.position = [(100,100), (80, 100), (60, 100)]
+        self.position = [(60, 200)]
         self.imageBody = ImageTk.PhotoImage(file="assets/body.png")
 
     def getPosition(self):
@@ -95,7 +122,9 @@ class Snake:
 
 class Food():
     def __init__(self):
-        self.position = (20, 20) 
+        xPosRandom = randint(1, 29) * 20
+        yPosRandom = randint(1, 29) * 20
+        self.position = (xPosRandom, yPosRandom) 
         self.imageFood = ImageTk.PhotoImage(file="assets/food.png")   
     
     def getPosition(self):
@@ -110,6 +139,7 @@ class Food():
 if __name__ == '__main__':
     app = Tk()
     app.title("Snake Game")
+    app.resizable(False, False) #Fixed Size
     #create class snake and class food
     snake = Snake()
     food = Food()

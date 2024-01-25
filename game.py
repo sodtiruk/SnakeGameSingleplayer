@@ -88,8 +88,6 @@ class Game(Canvas):
         #delete all images
         self.delete("all") 
 
-
-
         # reset all variable game
         self.snake.setPosition([(60, 200)])
         xPosFoodRandom = randint(1, 29) * 20
